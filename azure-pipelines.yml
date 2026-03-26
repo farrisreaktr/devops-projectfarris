@@ -4,11 +4,16 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  imageName: 'farrisreaktr/farris-devops-app'
+
 steps:
 - script: |
-    docker build -t farris-devops-app .
+    docker build -t $(imageName) .
   displayName: 'Build Docker Image'
 
 - script: |
-    docker run -d -p 3000:3000 farris-devops-app
-  displayName: 'Run Container'
+    echo "Login to Docker Hub"
+    docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
+    docker push $(imageName)
+  displayName: 'Push to Docker Hub'
