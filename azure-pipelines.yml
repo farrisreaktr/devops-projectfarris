@@ -1,0 +1,14 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+    docker build -t farris-devops-app .
+  displayName: 'Build Docker Image'
+
+- script: |
+    docker run -d -p 3000:3000 farris-devops-app
+  displayName: 'Run Container'
