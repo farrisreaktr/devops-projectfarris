@@ -1,18 +1,9 @@
-trigger:
-- main
-
-pool:
-  vmImage: 'ubuntu-latest'
-
-variables:
-  imageName: 'farrisreaktr/farris-devops-app'
-
-steps:
-- script: |
-    docker build -t $(imageName) .
-  displayName: 'Build Docker Image'
-
-- script: |
-    echo $(DOCKER_PASSWORD) | docker login -u $(DOCKER_USERNAME) --password-stdin
-    docker push $(imageName)
-  displayName: 'Push to Docker Hub'
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      docker push farrisreaktr/farris-devops-app:latest
+  env:
+    DOCKER_USERNAME: $(DOCKER_USERNAME)
+    DOCKER_PASSWORD: $(DOCKER_PASSWORD)
